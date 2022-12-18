@@ -1,0 +1,11 @@
+canvas {
+  border: 5px solid #000;
+  background-color: #fff;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: pink;
+}/*# sourceMappingURL=style.css.map */
