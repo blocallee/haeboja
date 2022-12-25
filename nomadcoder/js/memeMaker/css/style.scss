@@ -1,11 +1,26 @@
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: pink;
+}
+
 canvas {
   border: 5px solid #000;
   background-color: #fff;
 }
 
-body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: pink;
+.drawing-area {
+  //background-color: skyblue;
+}
+
+.color {
+  &-palette {
+    display: flex;
+  }
+  &-option {
+    width: 45px;
+    height: 45px;
+  }
 }
