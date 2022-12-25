@@ -8,7 +8,83 @@
     <link rel="stylesheet" href="./css/style.css" />
   </head>
   <body>
-    <canvas></canvas>
+    <div class="drawing-area">
+      <canvas></canvas>
+    </div>
+    <input type="range" id="line-width" min="1" max="10" value="5" step="0.5" />
+    <div class="drawing-mode">
+      <button type="button" id="drawing-mode" class="drawing-mode__btn">
+        Fill
+      </button>
+      <button
+        type="button"
+        id="drawing-mode-reset"
+        class="drawing-mode__btn drawing-mode__btn--reset"
+      >
+        Reset
+      </button>
+      <button
+        type="button"
+        id="drawing-mode-eraser"
+        class="drawing-mode__btn drawing-mode__btn--eraser"
+      >
+        Eraser
+      </button>
+    </div>
+    <div class="color-palette">
+      <input type="color" id="color-range" />
+      <div
+        class="color-option"
+        style="background-color: #fff"
+        data-color="#fff"
+      ></div>
+      <div
+        class="color-option"
+        style="background-color: #55efc4"
+        data-color="#55efc4"
+      ></div>
+      <div
+        class="color-option"
+        style="background-color: #81ecec"
+        data-color="#81ecec"
+      ></div>
+      <div
+        class="color-option"
+        style="background-color: #74b9ff"
+        data-color="#74b9ff"
+      ></div>
+      <div
+        class="color-option"
+        style="background-color: #a29bfe"
+        data-color="#a29bfe"
+      ></div>
+      <div
+        class="color-option"
+        style="background-color: #ffeaa7"
+        data-color="#ffeaa7"
+      ></div>
+      <div
+        class="color-option"
+        style="background-color: #fab1a0"
+        data-color="#fab1a0"
+      ></div>
+      <div
+        class="color-option"
+        style="background-color: #ff7675"
+        data-color="#ff7675"
+      ></div>
+      <div
+        class="color-option"
+        style="background-color: #fd79a8"
+        data-color="#fd79a8"
+      ></div>
+      <div
+        class="color-option"
+        style="background-color: #000"
+        data-color="#000"
+      ></div>
+    </div>
+    <button type="button" class="">집, 사람 그리기</button>
     <script src="./app.js"></script>
   </body>
 </html>
