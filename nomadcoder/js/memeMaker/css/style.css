@@ -52,9 +52,6 @@ canvas {
   padding: 0;
 }
 
-.drawing-wrap {
-  margin-top: -157px;
-}
 .drawing-content {
   display: flex;
   gap: 20px;
