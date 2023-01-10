@@ -1,0 +1,48 @@
+.game_app {
+  position: relative;
+  height: 100vh;
+
+  .game {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+  }
+}
+
+@keyframes hero_base {
+  from {
+    background-position-x: 0;
+  }
+  to {
+    background-position-x: -3770px;
+  }
+}
+
+.hero {
+  &_box {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 377px;
+    height: 458px;
+  }
+
+  & {
+    height: 100%;
+    background-image: url("../../../lib/images/ninja_idle.png");
+    background-size: 3770px 458px;
+    animation: hero_base 0.7s infinite steps(10);
+  }
+  &.run {
+    background-image: url("../../../lib/images/ninja_run.png");
+  }
+  &.attack {
+    background-image: url("../../../lib/images/ninja_attack.png");
+  }
+  &.flip {
+    transform: rotateY(180deg);
+  }
+}

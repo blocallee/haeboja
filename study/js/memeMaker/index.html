@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>짤 생성기</title>
+    <link rel="stylesheet" href="./css/style.css" />
+  </head>
+  <body>
+    <div class="drawing-wrap">
+      <h1>Meme Maker</h1>
+      <div class="drawing-content">
+        <div class="color-palette">
+          <div class="color-palette__line">
+            <input
+              type="range"
+              id="line-width"
+              min="1"
+              max="10"
+              value="5"
+              step="0.5"
+            />
+          </div>
+          <div class="palette-area">
+            <div class="palette-area__range">
+              <input type="color" id="color-range" class="palette-area__input" />
+              <div class="palette-area__text">
+                <p class="palette-area__title">SELECTED</p>
+                <p class="palette-area__color-text">#000</p>
+              </div>
+            </div>
+            <div class="color-options">
+              <div
+                class="color-option"
+                style="background-color: #55efc4"
+                data-color="#55efc4"
+              ></div>
+              <div
+                class="color-option"
+                style="background-color: #81ecec"
+                data-color="#81ecec"
+              ></div>
+              <div
+                class="color-option"
+                style="background-color: #74b9ff"
+                data-color="#74b9ff"
+              ></div>
+              <div
+                class="color-option"
+                style="background-color: #a29bfe"
+                data-color="#a29bfe"
+              ></div>
+              <div
+                class="color-option"
+                style="background-color: #ffeaa7"
+                data-color="#ffeaa7"
+              ></div>
+              <div
+                class="color-option"
+                style="background-color: #fab1a0"
+                data-color="#fab1a0"
+              ></div>
+              <div
+                class="color-option"
+                style="background-color: #ff7675"
+                data-color="#ff7675"
+              ></div>
+              <div
+                class="color-option"
+                style="background-color: #fd79a8"
+                data-color="#fd79a8"
+              ></div>
+              <div
+                class="color-option"
+                style="background-color: #000"
+                data-color="#000"
+              ></div>
+            </div>
+          </div>
+        </div>
+        <div class="drawing-area">
+          <canvas></canvas>
+        </div>
+        <div class="drawing-mode">
+          <div class="drawing-mode__tools">
+            <div>
+              <button type="button" id="drawing-mode" class="drawing-mode__btn">
+                채우기
+              </button>
+              <button
+              type="button"
+              id="drawing-mode-eraser"
+              class="drawing-mode__btn"
+              >
+              지우개
+            </button>
+          </div>
+          <button
+            type="button"
+            id="drawing-mode-reset"
+            class="drawing-mode__btn drawing-mode__btn--reset"
+          >
+            초기화
+          </button>
+          </div>
+          <div class="drawing-txt">
+            <label for="drawing-text">글자를 넣어볼까</label>
+            <input
+              type="text"
+              placeholder="입력 후 더블 클릭"
+              id="drawing-text"
+            />
+          </div>
+          <div class="drawing-mode__image">
+            <div class="drawing-mode__file">
+              <label
+                for="drawing-file"
+                id="drawing-file-select"
+                class="drawing-mode__btn drawing-mode__btn--fileslabel"
+                >이미지 고르기</label
+              >
+              <input type="file" accept="image/*" id="drawing-file" />
+              <p id="drawing-file-name" class="drawing-mode__filename">선택한 이미지가 없어요</span>
+            </div>
+            <button
+              type="button"
+              id="btn-img-save"
+              class="drawing-mode__btn drawing-mode__btn--save"
+            >
+              이미지 저장
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

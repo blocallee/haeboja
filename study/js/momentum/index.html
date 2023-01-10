@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./css/minireset.css" />
+    <link rel="stylesheet" href="./css/style.css" />
+    <title>Momentum</title>
+  </head>
+  <body>
+    <article class="mmt">
+      <section class="mmt__cont">
+        <div class="mmt__top">
+          <h1 id="greeting" class="hidden"></h1>
+          <form id="login-form" class="mmt__login" class="hidden">
+            <label for="inputName">이름이 뭐야?</label>
+            <input
+              required
+              type="text"
+              maxlength="15"
+              id="inputName"
+              placeholder="내 이름은.."
+            />
+            <button>알려준다</button>
+          </form>
+        </div>
+        <div class="mmt__right">
+          <div class="mmt__grp">
+            <p id="clock" class="mmt__clock">00:00:00</p>
+            <div id="weather" class="mmt__weather">
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+          <div id="quote" class="mmt__quote">
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+        <div class="mmt__todo">
+          <form id="todo-form">
+            <label for="inputTodo">할 일을 적어보자</label>
+            <input
+              type="text"
+              id="inputTodo"
+              placeholder="맛있는 밥 먹기"
+              required
+            />
+          </form>
+          <ul id="todo-list"></ul>
+        </div>
+      </section>
+    </article>
+    <script src="./js/greeting.js"></script>
+    <script src="./js/clock.js"></script>
+    <script src="./js/quotes.js"></script>
+    <script src="./js/bg.js"></script>
+    <script src="./js/todo.js"></script>
+    <script src="./js/weather.js"></script>
+  </body>
+</html>
