@@ -45,4 +45,15 @@
   &.flip {
     transform: rotateY(180deg);
   }
+  &_bullet {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    z-index: 90;
+    width: 160px;
+    height: 32px;
+    background-image: url(../../../lib/images/hero_bullet.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
 }

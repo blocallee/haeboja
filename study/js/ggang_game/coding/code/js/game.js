@@ -14,17 +14,31 @@ const key = {
   },
 };
 
+// 13. 수리검 이동
+const bulletComProp = {
+  // 13-1. 생성된 모든 수리검을 관리할 배열
+  // 수리검 배열. 공격 키를 누를 때 생성되는 수리검의 모든 인스턴스를 이 배열에 담을 것이다.
+  arr: [],
+};
+
 // 11. 자주 사용하는 값 공통터리
 const gameProp = {
   // 11-2. 화면의 넓이/높이 값 추가
   screenWidth: window.innerWidth,
-  screenHeight: window.innderHeight,
+  screenHeight: window.innerHeight,
 };
 
 // 10-6.움직임이 자연스럽지 않음(연속적인 키 눌림으로 딜레이 차이 발생)
 const renderGame = () => {
   // 10-10
   hero.keyMotion();
+
+  // 13-5. 히어로의 이동을 처리할 때처럼 렌더게임 함수에서 moveBullet 메서드를 호출해서 수리검이 이동하도록 적용.
+  // 수리검 배열의 길이만큼 반복하는 반복문
+  bulletComProp.arr.forEach((arr, i) => {
+    // 13-6. 수리검의 이동을 담당하는 moveBullet 메서드 호출
+    arr.moveBullet();
+  });
 
   // 10-8. requestAnimationFrame 이용해 renderGame 함수를 재귀호출
   // 초당 약 60프레임을 그리며 rednerGame 함수는 무한반복 된다.
