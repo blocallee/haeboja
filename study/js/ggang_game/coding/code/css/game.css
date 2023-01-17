@@ -47,6 +47,8 @@
 }
 .hero.attack {
   background-image: url("../../../lib/images/ninja_attack.png");
+  -webkit-animation: hero_base 0.7s 1 steps(10);
+          animation: hero_base 0.7s 1 steps(10);
 }
 .hero.flip {
   transform: rotateY(180deg);
@@ -58,7 +60,7 @@
   z-index: 90;
   width: 160px;
   height: 32px;
-  background-image: url(../../../lib/images/hero_bullet.png);
+  background-image: url("../../../lib/images/hero_bullet.png");
   background-size: cover;
   background-repeat: no-repeat;
 }/*# sourceMappingURL=game.css.map */

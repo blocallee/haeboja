@@ -145,5 +145,39 @@ class Bullet {
 
     // 13-8. this.distance 값을 수리검 엘리먼트에 적용하면 수리검이 이동한다.
     this.el.style.transform = `translate(${this.distance}px, ${this.y}px)`;
+
+    // 14-02. moveBullet 위치하여 수리검 이동할 때마다 호출
+    this.crashBullet();
+  }
+
+  // 14. 히어로의 위치를 알아내는 position 메서드 그대로 복붙해서 적용
+  // this.el 변수이기 떄문에 따로 수정할 필요는 없다.
+  // 상속을 활용한다면 같은 메서드를 두 번 작성할 필요는 없다.
+  position() {
+    return {
+      left: this.el.getBoundingClientRect().left,
+      right: this.el.getBoundingClientRect().right,
+      top: gameProp.screenHeight - this.el.getBoundingClientRect().top,
+      bottom:
+        gameProp.screenHeight -
+        this.el.getBoundingClientRect().top -
+        this.el.getBoundingClientRect().height,
+    };
+  }
+
+  // 14-01. 수리검 화면 벗어남과 충돌 체크 처리할 crachBullet 메서드 작성
+  // 이 메서드는 수리검이 이동할 때마다 호출하며
+  // 화면이 벗어났는지 충돌했는지 체크
+  crashBullet() {
+    // 14-03. 수리검 왼쪽 위치가 스크린의 넓이보다 크다면
+    // 수리검의 오른ㄴ쪽 위치가 0보다 작다면(화면 왼쪽을 벗어나면~!)
+    // 두 조건을 만족한다면 수리검 엘리먼트 삭제
+    if (
+      this.position().left > gameProp.screenWidth ||
+      this.position().right < 0
+    ) {
+      // 14.04. 수리검 엘리먼트를 삭제
+      this.el.remove();
+    }
   }
 }
