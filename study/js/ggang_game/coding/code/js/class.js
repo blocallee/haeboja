@@ -155,7 +155,7 @@ class Bullet {
     this.x =
       this.bulletDirection === "right"
         ? hero.movex + hero.size().width / 2
-        : (hero.movex = hero.size().width / 2);
+        : hero.movex - hero.size().width / 2;
     this.y = hero.position().bottom - hero.size().height / 2;
 
     // 13-13. 수리검의 x좌표를 distance 값에 넣어준다. (즉, 히어로의 위치값을 넣어주는 것)
@@ -216,6 +216,31 @@ class Bullet {
   // 이 메서드는 수리검이 이동할 때마다 호출하며
   // 화면이 벗어났는지 충돌했는지 체크
   crashBullet() {
+    // 21-2. 수리검 왼쪽 위치 값이 몬스터의 왼쪽 위치 값보다 크다면 (충돌). (수리검 오른쪽 위치값으로 해도 됨)
+    //    f(this.position().left > monster.position().left){
+    // 21-4. 수리검의 왼쪽 위치값이 몬스터의 왼쪽 위치값보다 크고
+    // 수리검의 오른쪽 위치값이 몬스터의 오른쪽 위치값보다 작다면 수리검 삭제
+    if (
+      this.position().left > monster.position().left &&
+      this.position().right < monster.position().right
+    ) {
+      // 21-3. 수리검 삭제
+      //    this.el.remove();
+
+      // 21-5. 배열에서 수리검 인스턴스 삭제
+      // 21-5-1. 먼저 수리검이 몬스터와 충돌했을 때 수리검 배열의 길이만큼 반복하는 반복문 추가
+      for (let i = 0; i < bulletComProp.arr.length; i++) {
+        // 21-5-2. 현재 충돌한 수리검을 찾는 조건문 필요
+        // 수리검 배열에 i번째 인스턴스가 현재 충돌한 수리검 this와 같다면
+        if (bulletComProp.arr[i] === this) {
+          // 21-5-3. 배열 삭제
+          bulletComProp.arr.splice(i, 1);
+
+          // 21-5-4. 21-3에서 적용한 수리검 삭제 코드를 splice 아래로 이동
+          this.el.remove();
+        }
+      }
+    }
     // 14-03. 수리검 왼쪽 위치가 스크린의 넓이보다 크다면
     // 수리검의 오른ㄴ쪽 위치가 0보다 작다면(화면 왼쪽을 벗어나면~!)
     // 두 조건을 만족한다면 수리검 엘리먼트 삭제
@@ -224,7 +249,73 @@ class Bullet {
       this.position().right < 0
     ) {
       // 14.04. 수리검 엘리먼트를 삭제
-      this.el.remove();
+      //    this.el.remove();
+
+      // 21-5-5. 21-5-1의 반복문과 동일
+      for (let i = 0; i < bulletComProp.arr.length; i++) {
+        if (bulletComProp.arr[i] === this) {
+          bulletComProp.arr.splice(i, 1);
+
+          // 21-5-4. 14.04에서 적용한 수리검 삭제 코드를 splice 아래로 이동
+          this.el.remove();
+        }
+      }
     }
+  }
+}
+
+// 20. 몬스터 클래스 추가
+class Monster {
+  // 22-7. 인스턴스 생성할 때 넘어온 위치(positionX)와 체력(hp)을 Monster 클래스에서 처리
+  constructor(positionX, hp) {
+    this.parentNode = document.querySelector(".game");
+    this.el = document.createElement("div");
+    this.el.className = "monster_box";
+    this.elChildren = document.createElement("div");
+    this.elChildren.className = "monster";
+    // 22.몬스터 체력 만들기
+    // 22-1. 몬스터 체력이 될 엘리먼트 생성
+    this.hpNode = document.createElement("div");
+    this.hpNode.className = "hp";
+
+    // 22-2. 몬스터 실제 체력
+    //  this.hpValue = 1000;
+    // 22-8. 기존 1000을 넣었던 hpValue에 인스터스 생성할 때 전달받은 hp 적용.
+    this.hpValue = hp;
+
+    // 22-3. textNode 를 만들어 hpValue 적용
+    this.hpTextNode = document.createTextNode(this.hpValue);
+
+    // 22-9. 인스턴스 생성할 때 전달받은 positionX 변수 추가
+    this.positionX = positionX;
+
+    this.init();
+  }
+
+  init() {
+    // 22-4. 생성한 몬스터 체력을 화면에 추가
+    // hp 엘리먼트에 텍스트 노드 추가
+    this.hpNode.appendChild(this.hpTextNode);
+    // 22-5. hpNode를 monster_box에 추가
+    this.el.appendChild(this.hpNode);
+
+    this.el.appendChild(this.elChildren);
+    this.parentNode.appendChild(this.el);
+
+    // 22-10. positionX값을 엘리먼트에 대입.
+    this.el.style.left = this.positionX + "px";
+  }
+
+  // 21. 몬스터 위치를 알 수 있는 position 추가(기존 Hero, Bullet position 복사)
+  position() {
+    return {
+      left: this.el.getBoundingClientRect().left,
+      right: this.el.getBoundingClientRect().right,
+      top: gameProp.screenHeight - this.el.getBoundingClientRect().top,
+      bottom:
+        gameProp.screenHeight -
+        this.el.getBoundingClientRect().top -
+        this.el.getBoundingClientRect().height,
+    };
   }
 }

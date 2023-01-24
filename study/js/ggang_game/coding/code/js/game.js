@@ -129,11 +129,20 @@ const loadImg = () => {
 // 8. class.js 에서 Hero 클래스를 만든 후 인스턴스 생성
 let hero;
 
+// 20-1. 몬스터 인스턴스 생성
+let monster;
+
 // 2. 프로그램 실행에 필요한 함수나 메소드를 호출
 const init = () => {
   // 8-1. init 함수에서 인스턴스 생성
   // 인스턴스를 생성하면서 히어로의 클래스명을 넘겨준다.
   hero = new Hero(".hero");
+
+  // 20-1.
+  // monster = new Monster();
+  // 22-6. 첫번째 인자값으로 (몬스터 위치, 몬스터 체력) 넘겨줌
+  monster = new Monster(500, 9000);
+
   // 10-5. 이미지 로드 함수는 프로그램 시작을 위해 호출되는 함수이기 때문에 init함수에서 호출
   loadImg();
   // 3.함수 취지에 맞게 windowEvent 함수를 호출
