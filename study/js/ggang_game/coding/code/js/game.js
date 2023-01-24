@@ -16,6 +16,8 @@ const key = {
 
 // 13. 수리검 이동
 const bulletComProp = {
+  // 13-9. 수리검을 던졌는지 공통으로 체크하는 변수 추가
+  launch: false,
   // 13-1. 생성된 모든 수리검을 관리할 배열
   // 수리검 배열. 공격 키를 누를 때 생성되는 수리검의 모든 인스턴스를 이 배열에 담을 것이다.
   arr: [],
@@ -31,24 +33,6 @@ const gameProp = {
   // 11-2. 화면의 넓이/높이 값 추가
   screenWidth: window.innerWidth,
   screenHeight: window.innerHeight,
-};
-
-// 17. 배경 이미지에 페럴럭스 효과 적용 (renderGame에 적용)
-// 패럴럭스 효과 적용 : 히어로가 이동한 만큼 배경도 이동되게 적용
-const setGameBackground = () => {
-  // 17-3. game엘리먼트에 히어로가 이동한 값을 적용
-  // 캐릭터가 이동한 값을 패럴럭스 변수에 담는다.
-  //    let parallaxValue = hero.movex;
-  // 17-4. hero.movex에 -1을 곱해 배경은 음수, 히어로는 양수로 이동처리.
-  //    let parallaxValue = hero.movex * -1;
-  // 17-5. 히어로가 가운데로 왔을 때 배경이 이동하도록 적용.
-  // 중간위치는 화면넓이/3, 여기에다 히어로가 이동한 값을 빼보자
-  //    let parallaxValue = hero.movex - (gameProp.screenWidth / 3) * -1;
-  // 17-6. 시작 시 parallaxValue가 0이 아닌 화면넓이/3 값이라 배경 왼쪽이 짤려있다.
-  // 0을 적용하기 위해서 Math.min()을 사용하자. Math.min()은 가장 작은 값을 반황한다.
-  // 0보다 크면 0을 적용하고 0보다 작다면 마이너스 값이 적용된다.
-  let parallaxValue = Math.min(0, (hero.movex - gameProp.screenWidth / 3) * -1);
-  gameBackground.gameBox.style.transform = `translateX(${parallaxValue}px)`;
 };
 
 // 10-6.움직임이 자연스럽지 않음(연속적인 키 눌림으로 딜레이 차이 발생)
@@ -69,6 +53,24 @@ const renderGame = () => {
   // 10-8. requestAnimationFrame 이용해 renderGame 함수를 재귀호출
   // 초당 약 60프레임을 그리며 rednerGame 함수는 무한반복 된다.
   window.requestAnimationFrame(renderGame);
+};
+
+// 17. 배경 이미지에 페럴럭스 효과 적용 (renderGame에 적용)
+// 패럴럭스 효과 적용 : 히어로가 이동한 만큼 배경도 이동되게 적용
+const setGameBackground = () => {
+  // 17-3. game엘리먼트에 히어로가 이동한 값을 적용
+  // 캐릭터가 이동한 값을 패럴럭스 변수에 담는다.
+  //    let parallaxValue = hero.movex;
+  // 17-4. hero.movex에 -1을 곱해 배경은 음수, 히어로는 양수로 이동처리.
+  //    let parallaxValue = hero.movex * -1;
+  // 17-5. 히어로가 가운데로 왔을 때 배경이 이동하도록 적용.
+  // 중간위치는 화면넓이/3, 여기에다 히어로가 이동한 값을 빼보자
+  //    let parallaxValue = hero.movex - (gameProp.screenWidth / 3) * -1;
+  // 17-6. 시작 시 parallaxValue가 0이 아닌 화면넓이/3 값이라 배경 왼쪽이 짤려있다.
+  // 0을 적용하기 위해서 Math.min()을 사용하자. Math.min()은 가장 작은 값을 반황한다.
+  // 0보다 크면 0을 적용하고 0보다 작다면 마이너스 값이 적용된다.
+  let parallaxValue = Math.min(0, (hero.movex - gameProp.screenWidth / 3) * -1);
+  gameBackground.gameBox.style.transform = `translateX(${parallaxValue}px)`;
 };
 
 // 1. window에 이벤트를 추가하고 관리.
