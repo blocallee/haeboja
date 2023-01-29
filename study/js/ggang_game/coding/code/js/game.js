@@ -14,6 +14,12 @@ const key = {
   },
 };
 
+// 24. 몬스터 배열 처리
+// 24-1. 몬스터를 관리할 오브젝트 배열 추가
+const allMonsterComProp = {
+  arr: [],
+};
+
 // 13. 수리검 이동
 const bulletComProp = {
   // 13-9. 수리검을 던졌는지 공통으로 체크하는 변수 추가
@@ -48,6 +54,11 @@ const renderGame = () => {
   bulletComProp.arr.forEach((arr, i) => {
     // 13-6. 수리검의 이동을 담당하는 moveBullet 메서드 호출
     arr.moveBullet();
+  });
+
+  // 27-1. 몬스터 배열의 길이만큼 도는 반복문을 만들어서 moveMonster 메서드 호출
+  allMonsterComProp.arr.forEach((arr, i) => {
+    arr.moveMonster();
   });
 
   // 10-8. requestAnimationFrame 이용해 renderGame 함수를 재귀호출
@@ -129,8 +140,8 @@ const loadImg = () => {
 // 8. class.js 에서 Hero 클래스를 만든 후 인스턴스 생성
 let hero;
 
-// 20-1. 몬스터 인스턴스 생성
-let monster;
+// 20-1. 몬스터 인스턴스 생성 // 24-2. 대량의 몬스터를 담을 배열을 추가했기 때문에 제거
+//    let monster;
 
 // 2. 프로그램 실행에 필요한 함수나 메소드를 호출
 const init = () => {
@@ -139,9 +150,12 @@ const init = () => {
   hero = new Hero(".hero");
 
   // 20-1.
-  // monster = new Monster();
+  //    monster = new Monster();
   // 22-6. 첫번째 인자값으로 (몬스터 위치, 몬스터 체력) 넘겨줌
-  monster = new Monster(500, 9000);
+  //    monster = new Monster(500, 9000);
+  // 24-2-1. 생성한 몬스터 인스턴스를 몬스터 공통 배열에 담기
+  allMonsterComProp.arr[0] = new Monster(700, 6000);
+  //allMonsterComProp.arr[1] = new Monster(1500, 400);
 
   // 10-5. 이미지 로드 함수는 프로그램 시작을 위해 호출되는 함수이기 때문에 init함수에서 호출
   loadImg();
