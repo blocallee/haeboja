@@ -25,6 +25,9 @@ class Hero {
     this.hpValue = 10000;
     // 28-1-3. 히어로의 초기 체력을 넣어둘 변수
     this.defaultHpValue = this.hpValue;
+
+    // 32-4. 공격 데미지를 담을 새 변수 추가
+    this.realDamage = 0;
   }
   // 1. 키를 눌렀을 때 히어로의 움직임을 변경
   keyMotion() {
@@ -140,6 +143,48 @@ class Hero {
     // 28-6-3. div.hp 안에 span 찾아서 hpProgress 값 대입
     const heroHpBox = document.querySelector(".state_box .hp span");
     heroHpBox.style.width = this.hpProgress + "%";
+
+    // 29-4. crash()메서드 호출. : 히어로의 체력이 깍일 때 충돌 모션이 나오게 적용
+    this.crash();
+
+    // 29-6. 히어로의 hp가 모두 닳았을 때 dead() 메서트 호출
+    if (this.hpValue === 0) {
+      this.dead();
+    }
+  }
+
+  // 29. 캐릭터 죽는 모션과 충돌 만들기
+  // 29-1. 히어로의 충돌모션을 처리할 crash() 메서드 추가
+  crash() {
+    // 29-3. 추가한 css 모션 적용. 충돌했다면 히어로 엘리먼트에 hero.crash() 추가
+    this.el.classList.add("crash");
+
+    // 29-4-1. 충돌모션 후 원래 모습으로 돌아지 않는 문제 수정
+    setTimeout(() => this.el.classList.remove("crash"), 400);
+  }
+
+  // 29-2. 캐릭터가 죽었을 때 모션을 처리할 dead() 메서드 추가
+  dead() {
+    // 29-5.히어로가 죽었을 때 모션 추가
+    hero.el.classList.add("dead");
+
+    // 30-2. endGame 함수 호출
+    endGame();
+  }
+
+  // 32. 데미지 확률 변경
+  /* 32-1. hitDamage()메서드 추가 
+			몬스터와 충돌할 때마다 체크해서 확률 조정
+	*/
+  hitDamage() {
+    /* 32-3. 히어로의 총 공격력에서 10% 빼기
+			[[문제]] 공경력이 계속 감소! 이유는 10프로를 뺀 값을 다시 담고 있기 떄문. 별도의 변수가 필요하다.
+					this.attackDamage = this.attackDamage - this.attackDamage * 0.1;
+		*/
+    /* 32-5. 새 변수에 담아주자.
+     */
+    this.realDamage =
+      this.attackDamage - Math.round(Math.random() * this.attackDamage * 0.1);
   }
 }
 
@@ -274,11 +319,20 @@ class Bullet {
           // 21-5-2. 현재 충돌한 수리검을 찾는 조건문 필요
           // 수리검 배열에 i번째 인스턴스가 현재 충돌한 수리검 this와 같다면
           if (bulletComProp.arr[i] === this) {
+            // 32-2. hitDamage() 메서드를 몬스터와 충돌할 때마다 호출
+            hero.hitDamage();
+
             // 21-5-3. 배열 삭제
             bulletComProp.arr.splice(i, 1);
 
             // 21-5-4. 21-3에서 적용한 수리검 삭제 코드를 splice 아래로 이동
             this.el.remove();
+
+            /* 31-2. damageView() 호출
+							    this.damageView();
+						*/
+            // 31-4.[[중요]] 충돌한 몬스터의 인스턴스를 넘겨준다
+            this.damageView(allMonsterComProp.arr[j]);
 
             // 23-2-1. 몬스터와 수리검이 충돌할 때 updateHp() 호출
             //    monster.updateHp();
@@ -312,6 +366,49 @@ class Bullet {
         }
       }
     }
+  }
+
+  // 31. 데미지 시각화 처리 및 랜덤 위치
+  /* 31-1. damageView 메서드 추가
+		     damageView(){
+	*/
+  // 31-4-1. 전달받은 인자 받기
+  damageView(monster) {
+    /* 31-3. 데미지 엘리먼트를 호출할 부모 찾기.
+			 현재 화면 크기를 기준으로 데미지의 위치를 지정하기 위해 .game_app 선택.			 
+		*/
+    this.parentNode = document.querySelector(".game_app");
+    // 31-3-1. 데미지 담을 엘리먼트 추가
+    this.textDamageNode = document.createElement("div");
+    this.textDamageNode.className = "text_damage";
+
+    /* 31-3-2. 히어로의 공격력을 담을 텍스트 넣기
+        this.textDamage = document.createTextNode(hero.attackDamage);
+    */
+    // 32-7. attackDamge -> realDamage 변경
+    this.textDamage = document.createTextNode(hero.realDamage);
+
+    // 31-3-3. 텍스트 노드를 텍스트데미지 엘리먼트에 추가
+    this.textDamageNode.appendChild(this.textDamage);
+    // 31-3-4. 텍스트 엘리먼트를 부모노드에 추가
+    this.parentNode.appendChild(this.textDamageNode);
+
+    // 31-5. 0~100까지의 난수 만들기
+    // 31-5-1. 변수 추가
+    let textPosition = Math.random() * -100;
+
+    /* 31-4-2. 변수 추가 : 충돌한 몬스터의 위치값을 담을 변수.
+				  let damagex = monster.position().left;
+		*/
+    // 31-5-2. damagex에 textPosition 더하기
+    let damagex = monster.position().left + textPosition;
+    let damagey = monster.position().top;
+
+    // 31-4-3. 텍스트 데미지 엘리먼트에 damagex, damagey값을 대입
+    this.textDamageNode.style.transform = `translate(${damagex}px, ${-damagey}px)`;
+
+    // 31-6. 쌓인 텍스트 데미지 엘리먼트를 제거
+    setTimeout(() => this.textDamageNode.remove(), 500);
   }
 }
 
@@ -398,8 +495,13 @@ class Monster {
     /* 23-3-1. 충돌이 일어나면 몬스터의 hpValue에서 히어로의 공격력을 빼준다.
       -    this.hpValue = this.hpValue - hero.attackDamage;
     */
-    // 23-3-3. Math.max 함수를 사용해서 두 개의 값 중 항상 큰 값이 나오도록 수정
-    this.hpValue = Math.max(0, this.hpValue - hero.attackDamage);
+    /* 23-3-3. Math.max 함수를 사용해서 두 개의 값 중 항상 큰 값이 나오도록 수정
+	        this.hpValue = Math.max(0, this.hpValue - hero.attackDamage);
+		*/
+    /* 32-6. 				
+				실제 공격력을 담은 변수는 attackDamage가 아닌 realDamage로 변경되었기 때문에
+				몬스터에게 타격되는 데미지를 attackDamage가 아닌 realDamage로 변경해야한다.*/
+    this.hpValue = Math.max(0, this.hpValue - hero.realDamage);
 
     // 26-4-3. 몬스터 게이지 백분율 구하기
     this.progress = (this.hpValue / this.defaultHpValue) * 100;

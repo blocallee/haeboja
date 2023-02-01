@@ -60,6 +60,28 @@
   float: left;
   width: 20%;
 }
+.game_over {
+  display: none;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 200;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.game_over.active {
+  display: block;
+}
+.game_over p {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 150px;
+  height: 100%;
+  color: #fff;
+  text-align: center;
+}
 
 @-webkit-keyframes hero_base {
   from {
@@ -76,6 +98,22 @@
   }
   to {
     background-position-x: -1498px;
+  }
+}
+@-webkit-keyframes hero_crash {
+  from {
+    background-position-x: 0;
+  }
+  to {
+    background-position-x: -299px;
+  }
+}
+@keyframes hero_crash {
+  from {
+    background-position-x: 0;
+  }
+  to {
+    background-position-x: -299px;
   }
 }
 .hero_box {
@@ -121,6 +159,19 @@
   background-size: cover;
   background-repeat: no-repeat;
   will-change: transform;
+}
+.hero.crash {
+  background-image: url("../../../lib/images/ninja_crash.png");
+  background-size: 299px 182px;
+  -webkit-animation: hero_crash 0.4s 1 steps(2);
+          animation: hero_crash 0.4s 1 steps(2);
+}
+.hero.dead {
+  background-image: url("../../../lib/images/ninja_dead.png");
+  background-size: 150px 182px;
+  -webkit-animation: none;
+          animation: none;
+  transform: rotate(100deg);
 }
 
 @-webkit-keyframes monster_run {
@@ -176,4 +227,50 @@
   background-size: 2242px 294px;
   -webkit-animation: monster_run 1s infinite steps(8);
           animation: monster_run 1s infinite steps(8);
+}
+
+@-webkit-keyframes textDamage {
+  0% {
+    opacity: 0;
+    bottom: 0;
+  }
+  70% {
+    opacity: 1;
+    bottom: 50px;
+  }
+  100% {
+    opacity: 0;
+    bottom: 90px;
+  }
+}
+
+@keyframes textDamage {
+  0% {
+    opacity: 0;
+    bottom: 0;
+  }
+  70% {
+    opacity: 1;
+    bottom: 50px;
+  }
+  100% {
+    opacity: 0;
+    bottom: 90px;
+  }
+}
+.text_damage {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  z-index: 200;
+  font-family: "roboto";
+  font-size: 110px;
+  background: linear-gradient(to bottom, rgb(196, 41, 30) 0%, rgb(230, 89, 191) 100%);
+  -webkit-text-stroke: 5px rgba(255, 255, 255, 0.7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -webkit-animation: textDamage 0.5s ease-out;
+          animation: textDamage 0.5s ease-out;
+  -webkit-animation-fill-mode: both;
+          animation-fill-mode: both;
 }/*# sourceMappingURL=game.css.map */

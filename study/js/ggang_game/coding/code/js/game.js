@@ -39,6 +39,9 @@ const gameProp = {
   // 11-2. 화면의 넓이/높이 값 추가
   screenWidth: window.innerWidth,
   screenHeight: window.innerHeight,
+
+  // 30-3. game over 변수 추가
+  gameOver: false,
 };
 
 // 10-6.움직임이 자연스럽지 않음(연속적인 키 눌림으로 딜레이 차이 발생)
@@ -66,6 +69,19 @@ const renderGame = () => {
   window.requestAnimationFrame(renderGame);
 };
 
+// 30. 게임 종료를 처리할 End game 함수 추가
+const endGame = () => {
+  // 30-4. end game 호출 시 gameOver 값 변경
+  gameProp.gameOver = true;
+
+  // 30-6. 강제로 키다운 이벤트 종료
+  key.keyDown.left = false;
+  key.keyDown.right = false;
+
+  // 30-1. 호출 시 active 클래스 추가
+  document.querySelector(".game_over").classList.add("active");
+};
+
 // 17. 배경 이미지에 페럴럭스 효과 적용 (renderGame에 적용)
 // 패럴럭스 효과 적용 : 히어로가 이동한 만큼 배경도 이동되게 적용
 const setGameBackground = () => {
@@ -91,13 +107,18 @@ const windowEvent = () => {
   // keyup: 키를 똈을 때 감지.
   // keydown: 키 눌렀을 때 감지.
   window.addEventListener("keydown", (e) => {
-    // 7-3. 사용자가 누른 key code 값을 key value object에서 value 값을 찾아보자.
-    // console.log(key.keyValue[e.which]);
-
-    // 7-5. 사용자가 누른 key value인 left, right를
-    // key down object에 key값으로 넣어주고
-    // value는 불리언(true)값 적용.
-    key.keyDown[key.keyValue[e.which]] = true;
+    /* 7-3. 사용자가 누른 key code 값을 key value object에서 value 값을 찾아보자.
+      - console.log(key.keyValue[e.which]);
+    */
+    /* 7-5. 사용자가 누른 key value인 left, right를
+      - key down object에 key값으로 넣어주고
+      - value는 불리언(true)값 적용.
+      -  key.keyDown[key.keyValue[e.which]] = true;		
+    */
+    // 30-5. 키이벤트로 이동해서 키눌림을 체크하는 부분에 조건문 작성하여 게임 오버시 키이벤트 종료
+    if (!gameProp.gameOver) {
+      key.keyDown[key.keyValue[e.which]] = true;
+    }
 
     // 8-2. key를 누를 때 히어로 인스턴스에 keyMotion 메소드를 호출해서 히어로의 움직임을 변경.
     // 10-9. 키 이벤트에 작성한 키모션 메소드 삭제하고 렌더게임함수에서 호출
