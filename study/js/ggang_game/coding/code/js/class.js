@@ -1,3 +1,113 @@
+// 35-2. stage 클래스 추가
+class Stage {
+  constructor() {
+    //(36-6) 레벨 변수 추가하여 스테이지 단계 적용.
+    this.level = 0;
+    // 36-2-1. 모든 몬스터가 0일 때 문제를 해결하기 위한 flag 추가
+    this.isStart = false;
+
+    // 35-2-2. 인스턴스 생성 시 stageStart 메서드 호출
+    this.stageStart();
+  }
+  // 35-2-1. stageStart 메서드 추가
+  stageStart() {
+    // 36-5. start와 clear 의 문구 겹침 문제 setTimeout으로 해결
+    setTimeout(() => {
+      // 36-2-2. 스테이지가 시작할 때 true
+      this.isStart = true;
+
+      /* 35-4-2. stageGuide 메서드 호출
+				-   this.stageGuide();
+			*/
+      // 36-3. 문구변경을 위한 stageGuide 메서드 변경(start,clear)
+      this.stageGuide(`START LEVEL${this.level + 1}`);
+
+      // 35-8. callMonster 메서드 호출
+      this.callMonster();
+    }, 2000);
+  }
+  // 35-4. 게임 시작할 때 Start Level 텍스트가 나타나도록 적용
+  /* 35-4-1. 텍스트를 처리할 스테이지 가이드 메서드 생성
+		-     stageGuide(){
+	*/
+  // 36-3-1. 호출할 때 넘어온 매개변수를 받아서 처리할 수 있게 수정
+  stageGuide(text) {
+    // 35-5. textBox 만들어서 부모노드에 추가하기
+    this.parentNode = document.querySelector(".game_app");
+    this.textBox = document.createElement("div");
+    this.textBox.className = "stage_box";
+
+    // -  (35-4)   this.textNode = document.createTextNode('START LEVEL1');
+    // 36-3-2. 호출할 때 넘어온 매개변수를 받아서 처리할 수 있게 수정
+    this.textNode = document.createTextNode(text);
+
+    this.textBox.appendChild(this.textNode);
+    this.parentNode.appendChild(this.textBox);
+
+    // 35-6. 텍스트박스가 나타났다 일정 시간 뒤에 사라지게 적용
+    setTimeout(() => this.textBox.remove(), 1500);
+  }
+
+  // 35-7. 몬스터 소환 메서드 추가
+  callMonster() {
+    for (let i = 0; i <= 10; i++) {
+      if (i === 10) {
+        /* 35-7 에서 작성
+	      allMonsterComProp.arr[i] = new Monster(greenMonBoss, hero.movex + gameProp.screenWidth + 600 * i);
+				*/
+        // 37-2. stageInfo에서 추가한 key,value값 적용
+        allMonsterComProp.arr[i] = new Monster(
+          stageInfo.monster[this.level].bossMon,
+          hero.movex + gameProp.screenWidth + 600 * i
+        );
+      } else {
+        /* 35-7 에서 작성
+					allMonsterComProp.arr[i] = new Monster(greenMon,gameProp.screenWidth + 700 * i);
+				*/
+        // 37-2-1. stageInfo에서 추가한 key,value값 적용
+        allMonsterComProp.arr[i] = new Monster(
+          stageInfo.monster[this.level].defaultMon,
+          hero.movex + gameProp.screenWidth + 700 * i
+        );
+      }
+    }
+  }
+
+  // 36-1. 모든몬스터를 사냥했는지 확인하는 메서드 생성
+  clearCheck() {
+    /* 36-2. 몬스터의 길이가 0과 같다면 모든 몬스터를 사냥했다는 뜻.
+				- 하지만 이렇게만 작성화면 이 조건문은 무한반복이 된다.
+				flag를 추가하여 해결할 수 있다.
+				-    if(allMonsterComProp.arr.length === 0){
+		*/
+    // 36-2-3. 추가 한 isStart가 true일 경우에만 반복문 안으로 들어올 수 있게 수정.
+    if (allMonsterComProp.arr.length === 0 && this.isStart) {
+      // 36-2-4. isStart 를 false로 변경
+      this.isStart = false;
+
+      // 36-6-2. 모든 몬스터 샤냥 시 1씩 증가
+      this.level++;
+
+      // 37-3. 몬스터 정보 배열 길이 만큼 조건문 적용
+      if (this.level < stageInfo.monster.length) {
+        // 36-3-3. 모든 몬스터를 사냥했다면 stageGuide 메서드 호출, 텍스트 전달
+        this.stageGuide("CLEAR");
+
+        /* 36-4. 모든 몬스터를 사냥했을 떼 stageStart 메서드를 다시 호출한다.
+					-    코드 적용 후 몬스터의 위치가 히어로는 움직였지만 화면 기준으로 되어있기 때문.	*/
+        this.stageStart();
+
+        // 37-5-1. heroUpgrade 메서드 호출. (스테이지가 끝날 때)
+        hero.heroUpgrade();
+
+        // 37-4. else 추가. All clear 문구 띄우기
+      } else {
+        this.stageGuide("ALL CLEAR!!");
+      }
+    }
+  } // clearCheck
+}
+
 class Hero {
   // 2. 넘겨받은 class명을 el로 받아준다.
   constructor(el) {
@@ -15,14 +125,14 @@ class Hero {
 
     // 23. 히어로의 공격 데미지 변수 추가
     // 23-1. 히어로의 공격 데미지 변수 추가
-    this.attackDamage = 1000;
+    this.attackDamage = 10000;
 
     /* 28-1-1. 히어로의 hp 변수
 		  - 히어로의 체력을 백분율로 계산할 값을 담을 변수 추가
 		*/
     this.hpProgress = 0;
     // 28-1-2. 히어로의 기본 체력 변수
-    this.hpValue = 10000;
+    this.hpValue = 100000;
     // 28-1-3. 히어로의 초기 체력을 넣어둘 변수
     this.defaultHpValue = this.hpValue;
 
@@ -135,11 +245,11 @@ class Hero {
 	*/
   // 28-6. 메서드 호출할 때 전달받은 인자값 추가
   updateHp(monsterDamage) {
-    // 28-6-1. 히어로 Hp에서 몬스터데미지 값을 뺀다
-    this.hpValue = this.hpValue - monsterDamage;
-    /* 28-6-2. 백분율 구하기. 백분율 = 깍인HP / 디폴트HP * 100
-			- Math.max 메서드를 사용해서 0 밑으로 내려가지 않게 적용. */
-    this.hpProgress = Math.max(0, (this.hpValue / this.defaultHpValue) * 100);
+    /* 28-6-1. 히어로 Hp에서 몬스터데미지 값을 뺀다
+			-  Math.max 메서드를 사용해서 0 밑으로 내려가지 않게 적용. */
+    this.hpValue = Math.max(0, this.hpValue - monsterDamage);
+    // 28-6-2. 백분율 구하기. 백분율 = 깍인HP / 디폴트HP * 100
+    this.hpProgress = (this.hpValue / this.defaultHpValue) * 100;
     // 28-6-3. div.hp 안에 span 찾아서 hpProgress 값 대입
     const heroHpBox = document.querySelector(".state_box .hp span");
     heroHpBox.style.width = this.hpProgress + "%";
@@ -185,6 +295,14 @@ class Hero {
      */
     this.realDamage =
       this.attackDamage - Math.round(Math.random() * this.attackDamage * 0.1);
+  }
+
+  // 37-5. 스테이지 클리어 시 히어로 스탯 조정 (heroUpgrade 메서드 추가)
+  heroUpgrade() {
+    // 37-5-2. 속도 향상
+    this.speed += 1.3;
+    // 37-5-3. 공격력 향상
+    this.attackDamage += 15000;
   }
 }
 
@@ -414,11 +532,21 @@ class Bullet {
 
 // 20. 몬스터 클래스 추가
 class Monster {
-  // 22-7. 인스턴스 생성할 때 넘어온 위치(positionX)와 체력(hp)을 Monster 클래스에서 처리
-  constructor(positionX, hp) {
+  /* 22-7. 인스턴스 생성할 때 넘어온 위치(positionX)와 체력(hp)을 Monster 클래스에서 처리
+	  -  constructor(positionX, hp) {
+	*/
+  /* 33-3. 생성자의 첫번째 매개변수 변경
+		- positionX -> property
+		- hp -> positionX
+	*/
+  constructor(property, positionX) {
     this.parentNode = document.querySelector(".game");
     this.el = document.createElement("div");
-    this.el.className = "monster_box";
+
+    // this.el.className = "monster_box";
+    // 33-3-1. 몬스터명 변경
+    this.el.className = "monster_box " + property.name;
+
     this.elChildren = document.createElement("div");
     this.elChildren.className = "monster";
     // 22.몬스터 체력 만들기
@@ -429,13 +557,19 @@ class Monster {
     /* 22-2. 몬스터 실제 체력
       -  this.hpValue = 1000;
     */
-    // 22-8. 기존 1000을 넣었던 hpValue에 인스터스 생성할 때 전달받은 hp 적용.
-    this.hpValue = hp;
+    /* 22-8. 기존 1000을 넣었던 hpValue에 인스터스 생성할 때 전달받은 hp 적용.
+	    -  this.hpValue = hp;
+		*/
+    // 33-3-2. 몬스터 체력 변경
+    this.hpValue = property.hpValue;
 
     // 26-4. 몬스터가 공격받으면 게이지가 줄어드는 기능 추가
     /* 26-4-1. 최초Hp를 담을 변수 추가
-      - 이 변수는 최초Hp값 그대로 유지 */
-    this.defaultHpValue = hp;
+      - 이 변수는 최초Hp값 그대로 유지 
+	    -   this.defaultHpValue = hp;
+		*/
+    // 33-3-3. 몬스터 기본 체력 변경
+    this.defaultHpValue = property.hpValue;
 
     /* 22-3. textNode 를 만들어 hpValue 적용    // 26-1. progress로 디자인하기 위해 기존 텍스트노드 변수 제거 (span으로 변경)
       -     this.hpTextNode = document.createTextNode(this.hpValue);
@@ -448,11 +582,20 @@ class Monster {
 
     // 27-2. 변수 moveX, speed 추가
     this.moveX = 0;
-    this.speed = 4;
+    // -   this.speed = 10;
+    // 33-3-4. 몬스터 스피드 변경
+    this.speed = property.speed;
 
     // 28. 히어로와 몬스터 충돌 시 에너지 관리
-    // 28-1. 히어로와 몬스터가 충똘했을 때 충돌 데미지
-    this.crashDamage = 100;
+    /* 28-1. 히어로와 몬스터가 충돌했을 때 충돌 데미지
+	    -   this.crashDamage = 100;
+		*/
+    // 33-3-5. 몬스터 충돌데미지 변경
+    this.crashDamage = property.crashDamage;
+
+    // 38-3. 몬스터가 죽었을 때  점수 적용
+    // 38-3-1. monster 클래스 생성자에 score 변수 선언
+    this.score = property.score;
 
     this.init();
   }
@@ -534,6 +677,9 @@ class Monster {
 
     // 25-4. 몬스터 배열에서 인스턴스 삭제. // 25-4-4 에서 받은 index 값 추가
     allMonsterComProp.arr.splice(index, 1);
+
+    // 38-7. 몬스터가 죽었을 때 점수 올려야하니 dead 메서드에 적용.
+    this.setScore();
   }
   // 27. 몬스터를 이동시켜줄 메서드 생성 // 27-1.은 game.js에서 반복문으로 메서드 호출
   moveMonster() {
@@ -606,10 +752,18 @@ class Monster {
 			- 히어로 왼쪽에서 leftDiff를 빼주어 여백으로 인한 문제 수정하여 충돌 적확도를 높힌다. */
     if (
       hero.position().right - rightDiff > this.position().left &&
-      hero.position().left - leftDiff > this.position().right
+      hero.position().left - leftDiff < this.position().right
     ) {
       // 28-5. 몬스터와 히어로가 충돌했을 때 히어로 체력 관리하는 메서드 호출하고 충돌 데미지를 전달
       hero.updateHp(this.crashDamage);
     }
+  }
+
+  // 38-4. 몬스터가 죽었을 때 점수를 반영해줄 메서드 생성(setScore)
+  setScore() {
+    // 38-5. 죽은 몬스터의 점수를 더한다.
+    stageInfo.totalScore += this.score;
+    // 38-6. score box에 현재 얻은 점수 반영
+    document.querySelector(".score_box").innerText = stageInfo.tatalScore;
   }
 }

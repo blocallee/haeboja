@@ -34,6 +34,21 @@ const gameBackground = {
   gameBox: document.querySelector(".game"),
 };
 
+// 35. 게임 시작할 때 게임 스타트 추가와 몬스터를 소환.
+// 35-1. 스테이지를 관리해줄 Object를 추가
+const stageInfo = {
+  stage: [],
+  // 38-1. totalScore 변수 추가
+  totalScore: 0,
+  // 37. 스테이지 레벨별 몬스터 추가 및 레벨업 시 히어로 스탯 조정
+  // 37-1. 몬스터 배열을 만들어 key,value로 추가
+  monster: [
+    { defaultMon: greenMon, bossMon: greenMonBoss },
+    { defaultMon: yellowMon, bossMon: yellowMonBoss },
+    { defaultMon: pinkMon, bossMon: pinkMonBoss },
+  ],
+};
+
 // 11. 자주 사용하는 값 공통터리
 const gameProp = {
   // 11-2. 화면의 넓이/높이 값 추가
@@ -63,6 +78,9 @@ const renderGame = () => {
   allMonsterComProp.arr.forEach((arr, i) => {
     arr.moveMonster();
   });
+
+  // 36-1-1.  호출: game.js 렌더게임 함수에서 계속 호출하면서 몬스터를 모두 사냥했는지 체크
+  stageInfo.stage.clearCheck();
 
   // 10-8. requestAnimationFrame 이용해 renderGame 함수를 재귀호출
   // 초당 약 60프레임을 그리며 rednerGame 함수는 무한반복 된다.
@@ -170,13 +188,41 @@ const init = () => {
   // 인스턴스를 생성하면서 히어로의 클래스명을 넘겨준다.
   hero = new Hero(".hero");
 
+  // 35-3. Stage 클래스 인스턴스 생성
+  stageInfo.stage = new Stage();
+
   // 20-1.
   //    monster = new Monster();
   // 22-6. 첫번째 인자값으로 (몬스터 위치, 몬스터 체력) 넘겨줌
   //    monster = new Monster(500, 9000);
-  // 24-2-1. 생성한 몬스터 인스턴스를 몬스터 공통 배열에 담기
-  allMonsterComProp.arr[0] = new Monster(700, 6000);
-  //allMonsterComProp.arr[1] = new Monster(1500, 400);
+  /* 24-2-1. 생성한 몬스터 인스턴스를 몬스터 공통 배열에 담기
+	  -   allMonsterComProp.arr[0] = new Monster(700, 6000);
+		-   allMonsterComProp.arr[1] = new Monster(1500, 400);
+	*/
+  /* 33-2. 인스턴스 생성할 때 핑크몬 오브젝트 넘겨주기.
+		- 기존 new Monster(생성 위치, 체력)
+		- 변경 new Monster(Object, 생성 위치) -> 생성위치 = 화면 넓이 + 생성하고 싶은 위치	
+	  -    allMonsterComProp.arr[0] = new Monster(pinkMon, gameProp.screenWidth +  700);
+    -    allMonsterComProp.arr[1] = new Monster(yellowMon,gameProp.screenWidth + 1400);
+    -    allMonsterComProp.arr[2] = new Monster(greenMon, gameProp.screenWidth + 2100);
+	*/
+  /* 34-2. 반복문을 사용하여 일반 몬스터 대량 소환 및 보스몹 소환!
+	    -  i를 곱해서 몬스터끼리의 간격 설정
+  for (let i = 0; i <= 10; i++) {
+    if (i === 10) {
+      allMonsterComProp.arr[i] = new Monster(
+        greenMonBoss,
+        gameProp.screenWidth + 600 * i
+      );
+    } else {
+      allMonsterComProp.arr[i] = new Monster(
+        greenMon,
+        gameProp.screenWidth + 700 * i
+      );
+    }
+  }
+  */
+  // 35-7-1. 몬스터 소환 반복문 잘라내서 클래스 Stage callMonster 메서드로 이동
 
   // 10-5. 이미지 로드 함수는 프로그램 시작을 위해 호출되는 함수이기 때문에 init함수에서 호출
   loadImg();
