@@ -11,6 +11,9 @@ const key = {
     // 9. 공격 key인 'x' 추가 후
     // class.js keyMotion 메서드에 조건문으로 attack 클래스 추가/제거
     88: "attack",
+    // 39. 슬라이드모션 만들어 적용.
+    // 39-1. 키 누를 때 슬라이드 적용
+    67: "slide",
   },
 };
 
@@ -47,6 +50,9 @@ const stageInfo = {
     { defaultMon: yellowMon, bossMon: yellowMonBoss },
     { defaultMon: pinkMon, bossMon: pinkMonBoss },
   ],
+  /* (42-1-1) callPosition 값을 추가. 
+		 - 히어로가 1000만큼 이동했을 때 greenMon이 나오고, 2000은 yellomon 등으로 매핑 */
+  callPosition: [1000, 5000, 9000],
 };
 
 // 11. 자주 사용하는 값 공통터리

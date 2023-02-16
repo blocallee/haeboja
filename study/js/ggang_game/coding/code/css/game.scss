@@ -47,7 +47,8 @@
           height: 100%;
           padding-top: 10px;
 
-          .hp {
+          .hp,
+          .exp {
             width: 100%;
             height: 10px;
             border: 1px solid #000;
@@ -60,11 +61,27 @@
               transition: width 0.3s linear;
             }
           }
+          .exp {
+            margin-top: 5px;
+            span {
+              width: 0;
+              background-color: #ffd700;
+            }
+          }
         }
       }
       &_img {
+        position: relative;
         float: left;
         width: 20%;
+
+        .level_box {
+          position: absolute;
+          top: 100%;
+          left: 0;
+          font-size: 14px;
+          color: #fff;
+        }
       }
     }
 
@@ -144,6 +161,20 @@
     background-position-x: -299px;
   }
 }
+@keyframes hero_levelup {
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
 
 .hero_box {
   position: fixed;
@@ -152,6 +183,23 @@
   width: 150px;
   height: 182px;
   will-change: transform;
+
+  .level_up {
+    opacity: 0;
+    position: absolute;
+    left: 50%;
+    bottom: 100%;
+    width: 200px;
+    height: 42px;
+    background-image: url(../../../lib/images/levelup.png);
+    background-size: cover;
+    transform: translateX(-50%);
+
+    &.active {
+      animation: hero_levelup 1s linear;
+      animation-fill-mode: both;
+    }
+  }
 }
 
 .hero {
@@ -197,6 +245,12 @@
     background-size: 150px 182px;
     animation: none;
     transform: rotate(100deg);
+  }
+
+  &.slide {
+    background-image: url("../../../lib/images/ninja_slide.png");
+    background-size: 1498px 182px;
+    animation: hero_base 0.7s 1 steps(10);
   }
 }
 
