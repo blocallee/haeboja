@@ -14,6 +14,8 @@ const key = {
     // 39. 슬라이드모션 만들어 적용.
     // 39-1. 키 누를 때 슬라이드 적용
     67: "slide",
+    // 44-4. enter 키 추가
+    13: "enter",
   },
 };
 
@@ -72,6 +74,12 @@ const renderGame = () => {
 
   // 17-2. setGameBackground 호출
   setGameBackground();
+
+  // (43-6-4) Npc 충돌메서드 호출
+  npcOne.crash();
+
+  // (48-5) 두번째 npc 충돌메서드 호출
+  npcTwo.crash();
 
   // 13-5. 히어로의 이동을 처리할 때처럼 렌더게임 함수에서 moveBullet 메서드를 호출해서 수리검이 이동하도록 적용.
   // 수리검 배열의 길이만큼 반복하는 반복문
@@ -144,6 +152,15 @@ const windowEvent = () => {
       key.keyDown[key.keyValue[e.which]] = true;
     }
 
+    // 44-4-1. enter 키 추가
+    // (문제) renderGame에 적용할 경우 키눌림의 딜레이 차이 없이 키눌림 체크가 빠르게 되면서 talk 메서드가 여러번 호출되는 문제로
+    if (key.keyDown["enter"]) {
+      npcOne.talk();
+
+      // (48-6) 두번째 npc talk() 메서드 호출
+      npcTwo.talk();
+    }
+
     // 8-2. key를 누를 때 히어로 인스턴스에 keyMotion 메소드를 호출해서 히어로의 움직임을 변경.
     // 10-9. 키 이벤트에 작성한 키모션 메소드 삭제하고 렌더게임함수에서 호출
     // hero.keyMotion();
@@ -184,9 +201,12 @@ const loadImg = () => {
 };
 // 8. class.js 에서 Hero 클래스를 만든 후 인스턴스 생성
 let hero;
-
 // 20-1. 몬스터 인스턴스 생성 // 24-2. 대량의 몬스터를 담을 배열을 추가했기 때문에 제거
 //    let monster;
+// (43-5) Npc Class 인스턴스 생성
+let npcOne;
+// (48-2) 두번째 npc 추가
+let npcTwo;
 
 // 2. 프로그램 실행에 필요한 함수나 메소드를 호출
 const init = () => {
@@ -196,6 +216,15 @@ const init = () => {
 
   // 35-3. Stage 클래스 인스턴스 생성
   stageInfo.stage = new Stage();
+
+  /* (43-5-1) Npc Class 인스턴스 생성
+          npcOne = new Npc(); 
+  */
+  // (47-1-1) npc 인스턴스를 생성할 때 levelQuest 넘기기
+  npcOne = new Npc(levelQuest);
+
+  // (48-3) 두번째 npc 인스터스 생성
+  npcTwo = new Npc(levelQuestTwo);
 
   // 20-1.
   //    monster = new Monster();

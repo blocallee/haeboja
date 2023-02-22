@@ -1,3 +1,152 @@
+// 43. Npc 클래스 추가
+class Npc {
+  //constructor() {
+  // (47-1-2) 넘어온 퀘스트 오브젝트 프로퍼티(levelQuest)를 받는다
+  constructor(property) {
+    // (47-1-3) property 변수 생성 : 넘어온 프로퍼티값 담기
+    this.property = property;
+    // (43-1) 클래스에 인스턴스를 생성할 때 npc를 화면에 추가
+    this.parentNode = document.querySelector(".game");
+    this.el = document.createElement("div");
+    this.el.className = "npc_box";
+    // (43-6-5) hero와 npc가 충돌했을 때를 체크할 변수 추가
+    this.npcCrash = false;
+
+    // (44) 히어로와 npc가 충돌했을 때 사용자가 엔터키를 누르면 모달창이 나타나도록
+    //(44-1) 모달창 체크 변수 선언
+    this.talkOn = false;
+    //(44-2) 모달 el를 담을 변수
+    this.modal = document.querySelector(".quest_modal");
+
+    // (46-2) 퀘스트 시작, 종료를 체크할 변수 선언!
+    this.questStart = false;
+    this.questEnd = false;
+
+    this.init();
+  }
+
+  init() {
+    // (43-2) html에 작성한 요소를 js로 가져와서 변수에 할당연산자로 담기
+    let npcTalk = "";
+    npcTalk += '  <div class="talk_box">';
+    /*  quest 내용 (47-2-1) 위치로 이동
+    npcTalk += "<p>큰일이야<br />사람들이 좀비로 변하고 있어.. <br /><span>대화 Enter</span></p>"; */
+    // (47-2-2) quest.js levelQuest 오브젝트에서 property 적용
+    npcTalk += this.property.idleMessage;
+    npcTalk += "  </div>";
+    npcTalk += '  <div class="npc"></div>';
+    npcTalk += "</div>";
+    // (43-3) npc_box에 npcTalk 변수에 있는 모든 요소들을 담고
+    this.el.innerHTML = npcTalk;
+
+    // (47-3-2) npc를 초기화할 때 위치 잡아주기
+    this.el.style.left = this.property.positionX + "px";
+
+    // (43-4) parent Node 인 .game에 npc_box 엘리먼트를 추가
+    this.parentNode.appendChild(this.el);
+  }
+
+  // (43-6) 충돌기능 : npc 와 히어로의 충돌했을 때만 대화 가능)
+  // (43-6-1) Npc의 위치 알기 : position 메서드 추가(hero 클래스 11번꺼 복붙)
+  position() {
+    return {
+      left: this.el.getBoundingClientRect().left,
+      right: this.el.getBoundingClientRect().right,
+      top: gameProp.screenHeight - this.el.getBoundingClientRect().top,
+      bottom:
+        gameProp.screenHeight -
+        this.el.getBoundingClientRect().top -
+        this.el.getBoundingClientRect().height,
+    };
+  }
+
+  // (43-6-2) 충돌메서드 추가
+  crash() {
+    // (43-6-3) 충돌 조건문
+    if (
+      hero.position().right > this.position().left &&
+      hero.position().left < this.position().right
+    ) {
+      // (43-6-6) npcCrash변수를 npc와 hero가 충돌 시 true로 변경
+      this.npcCrash = true;
+    } else {
+      this.npcCrash = false;
+    }
+  }
+
+  //(44-3) talk 메서드 추가 : 모달 show/hide
+  talk() {
+    //(44-3-1) 조건문 : 대화창 열려있지 않고, 충돌했을 때
+    if (!this.talkOn && this.npcCrash) {
+      this.talkOn = true;
+      // (45-3) 모달이 열릴 때 quest() 호출
+      //     this.quest();
+      // (47-2-7) 기존 quest() 호출하던 부분 수정
+      this.property.quest();
+      this.modal.classList.add("active");
+    } else if (this.talkOn) {
+      this.talkOn = false;
+      this.modal.classList.remove("active");
+    }
+  }
+
+  /* (47-2-3) quest() 메서드(퀘스트 내용)를 quest.js로 분리하기
+    // ( 45 ) 퀘스트 내용을 만들어 모달에 추가.
+    quest() {
+      // (46-1) 메세지 오브젝트 만들기 : 선언
+      const message = {
+        // (46-1-1) 퀘스트 시작
+        start:
+          "마을에 몬스터가 출몰해 주민들을 좀비로 만들고 있어.. 몬스터 사냥해 주민을 구하고 <span>레벨을 5이상</span>으로 만들어 힘을 증명한다면 좀비왕을 물리칠 수 있도록 내 힘을 빌려줄께!!",
+        // (46-1-2) 퀘스트 진행중 : npc에게 말 한 번 이상 걸었고 조건 불충족.
+        ing: "이런 아직 레벨을 달성하지 못했구나.",
+        // (46-1-3) 퀘스트 성공 : npc에게 말 한 번 이상 걸었고 조건 충족.
+        suc: "레벨을 달성했구나! 힘을 줄게!",
+        // (46-1-4) 퀘스트 완료 : 퀘스트 완료 후에 다시 npc에게 말을 걸었을 때
+        end: "고마워! 행운을 빌어!",
+      };
+
+      // (46-2-1) 퀘스트 진행 상태에 따른 메세지를 담을 변수 선언
+      let messageState = "";
+
+      // (46-2-2) 퀘스트 진행 상황에 맞는 메세지가 출력되도록 조건문 작성
+      if (!this.questStart) {
+        messageState = message.start;
+        this.questStart = true;
+      } else if (this.questStart && !this.questEnd && hero.level < 5) {
+        messageState = message.ing;
+      } else if (this.questStart && !this.questEnd && hero.level >= 5) {
+        messageState = message.suc;
+        this.questEnd = true;
+
+        // (46-3-4)퀘스트 완료 시 보상으로 heroUpgrade 호출
+        hero.heroUpgrade(50000);
+      } else if (this.questStart && this.questEnd) {
+        messageState = message.end;
+      }
+
+      // (45-1) html에 적용했던 퀘스트 내용을 가져온다(html에서는 삭제)
+      let text = "";
+      text += '<figuer class="npc_img">';
+      text += ' <img src="../../lib/images/npc.png" alt="npc" />';
+      text += "</figuer>";
+      text += "<p>";
+
+      // 46-2-3 기존 부분 주석처리
+      //      text += "마을에 몬스터가 출몰해 주민들을 좀비로 만들고 있어.. 몬스터 사냥해 주민을 구하고 <span>레벨을 5이상</span>으로 만들어 힘을 증명한다면 좀비왕을 물리칠 수 있도록 내 힘을 빌려줄께!!";
+      // (46-2-4) messageState 를 화면에 출력
+      text += messageState;
+      text += "</p>";
+
+      // (45-2) quest_talk을 찾아서 text 추가
+      const modalInner = document.querySelector(
+        ".quest_modal .inner_box .quest_talk"
+      );
+      modalInner.innerHTML = text;
+    }
+  */
+}
+
 // 35-2. stage 클래스 추가
 class Stage {
   constructor() {
@@ -405,12 +554,20 @@ class Hero {
       this.attackDamage - Math.round(Math.random() * this.attackDamage * 0.1);
   }
 
-  // 37-5. 스테이지 클리어 시 히어로 스탯 조정 (heroUpgrade 메서드 추가)
-  heroUpgrade() {
+  /* 37-5. 스테이지 클리어 시 히어로 스탯 조정 (heroUpgrade 메서드 추가)
+     -    heroUpgrade() {
+  */
+  // (46-3-1) 매개변수 받아서 적용되게 수정
+  heroUpgrade(upDamage) {
     // 37-5-2. 속도 향상
     // this.speed += 1.3; // (40-6-1) 제거
-    // 37-5-3. 공격력 향상 || (40-6-2) 공격력 수정
-    this.attackDamage += 5000;
+    /* 37-5-3. 공격력 향상 || (40-6-2) 공격력 수정
+       -    this.attackDamage += 5000;
+    */
+    // (46-3-2) 매개변수에 값이 없을 때 기본값 적용
+    let damage = upDamage ?? 5000;
+    // (46-3-3) 공력력 매개변수로 적용
+    this.attackDamage += damage;
   }
 
   // (40-2) 히어로 경험치 반영할 메서드 추가. 넘어온 경험치 받기
