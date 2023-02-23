@@ -317,6 +317,15 @@
   }
 }
 
+@keyframes zombie_king_run {
+  from {
+    background-position-x: 0;
+  }
+  to {
+    background-position-x: -4300px;
+  }
+}
+
 .monster {
   &_box {
     position: absolute;
@@ -394,6 +403,17 @@
         background-image: url("../../../lib/images/monster/monster_yellow_run.png");
         background-size: 3600px 472px;
         animation: monster_run_boss 1s infinite steps(8);
+      }
+    }
+
+    &.zombie_king {
+      width: 430px;
+      height: 519px;
+
+      .monster {
+        background-image: url("../../../lib/images/monster/zombie_run.png");
+        background-size: 4300px 519px;
+        animation: zombie_king_run 1s infinite steps(10);
       }
     }
 

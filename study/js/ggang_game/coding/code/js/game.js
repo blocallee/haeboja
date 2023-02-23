@@ -51,10 +51,14 @@ const stageInfo = {
     { defaultMon: greenMon, bossMon: greenMonBoss },
     { defaultMon: yellowMon, bossMon: yellowMonBoss },
     { defaultMon: pinkMon, bossMon: pinkMonBoss },
+    // (49-1) 좀비킹 추가
+    { defaultMon: pinkMon, bossMon: zombieKing },
   ],
   /* (42-1-1) callPosition 값을 추가. 
 		 - 히어로가 1000만큼 이동했을 때 greenMon이 나오고, 2000은 yellomon 등으로 매핑 */
-  callPosition: [1000, 5000, 9000],
+  //       callPosition: [1000, 5000, 9000],
+  //(49-3) (game.js) callPosition에 소환위치 맵핑
+  callPosition: [1000, 5000, 9000, 12000],
 };
 
 // 11. 자주 사용하는 값 공통터리
@@ -188,6 +192,8 @@ const loadImg = () => {
   const preLoadImgSrc = [
     "../../lib/images/ninja_run.png",
     "../../lib/images/ninja_attack.png",
+    // 50. 슬라이드 이미지 추가
+    "../../lib/images/ninja_slide.png",
   ];
 
   // 10-2. 배열에 있는 이미지 length만큼 반복하는 반복문 추가

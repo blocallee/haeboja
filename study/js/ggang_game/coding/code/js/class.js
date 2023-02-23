@@ -28,13 +28,13 @@ class Npc {
   init() {
     // (43-2) html에 작성한 요소를 js로 가져와서 변수에 할당연산자로 담기
     let npcTalk = "";
-    npcTalk += '  <div class="talk_box">';
+    npcTalk += '<div class="talk_box">';
     /*  quest 내용 (47-2-1) 위치로 이동
     npcTalk += "<p>큰일이야<br />사람들이 좀비로 변하고 있어.. <br /><span>대화 Enter</span></p>"; */
     // (47-2-2) quest.js levelQuest 오브젝트에서 property 적용
     npcTalk += this.property.idleMessage;
-    npcTalk += "  </div>";
-    npcTalk += '  <div class="npc"></div>';
+    npcTalk += "</div>";
+    npcTalk += '<div class="npc"></div>';
     npcTalk += "</div>";
     // (43-3) npc_box에 npcTalk 변수에 있는 모든 요소들을 담고
     this.el.innerHTML = npcTalk;
@@ -321,6 +321,9 @@ class Hero {
     // (39-2-1) 슬라이드스피드 변수 추가. 히어로가 좌우로 움직일 때처럼 필요
     this.slideSpeed = 14;
 
+    //?
+    this.slideTime = 0;
+
     // (39-3) 일정 시간 지나면 slide 클래스 제거
     // (39-3-1)슬라이드 시간 변수 추가
     this.slideMaxTime = 30;
@@ -395,7 +398,9 @@ class Hero {
         if (this.direction === "right") {
           this.movex = this.movex + this.slideSpeed;
         } else {
-          this.movez = this.movex - this.slideSpped;
+          //    this.movex = this.movex - this.slideSpped;
+          // 50-1. 슬라이드 모션 수정
+          this.movex = this.movex <= 0 ? 0 : this.movex - this.slideSpeed;
         }
 
         // (39-3-2) 슬라이드 타임이 30보다 크다면 슬라이드 취소.
@@ -515,7 +520,7 @@ class Hero {
   // (41-1-1) renderHp() 메서드 추가
   renderHp() {
     // (41-1-2) 체력게이지 변경코드 옮기기
-    this.hpProgress = Math.max(0, (this.hpValue / this.defaultHpValue) * 100);
+    this.hpProgress = (this.hpValue / this.defaultHpValue) * 100;
     const heroHpBox = document.querySelector(".state_box .hp span");
     heroHpBox.style.width = this.hpProgress + "%";
   }
@@ -1071,7 +1076,7 @@ class Monster {
 			- 히어로 왼쪽에서 leftDiff를 빼주어 여백으로 인한 문제 수정하여 충돌 적확도를 높힌다. */
     if (
       hero.position().right - rightDiff > this.position().left &&
-      hero.position().left - leftDiff < this.position().right
+      hero.position().left + leftDiff < this.position().right
     ) {
       /* 28-5. 몬스터와 히어로가 충돌했을 때 히어로 체력 관리하는 메서드 호출하고 충돌 데미지를 전달
         -   hero.updateHp(this.crashDamage);
