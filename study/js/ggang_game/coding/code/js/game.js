@@ -25,6 +25,12 @@ const allMonsterComProp = {
   arr: [],
 };
 
+// 51. npc 배열처리
+// 51-1. 오브젝트 배열 추가
+const allNpcComProp = {
+  arr: [],
+};
+
 // 13. 수리검 이동
 const bulletComProp = {
   // 13-9. 수리검을 던졌는지 공통으로 체크하는 변수 추가
@@ -80,10 +86,14 @@ const renderGame = () => {
   setGameBackground();
 
   // (43-6-4) Npc 충돌메서드 호출
-  npcOne.crash();
+  //     npcOne.crash();
+  // 51-3. 배열로 변경
+  allNpcComProp.arr.forEach((arr, i) => {
+    arr.crash();
+  });
 
   // (48-5) 두번째 npc 충돌메서드 호출
-  npcTwo.crash();
+  //     npcTwo.crash(); // 51-3에서 배열로 적용
 
   // 13-5. 히어로의 이동을 처리할 때처럼 렌더게임 함수에서 moveBullet 메서드를 호출해서 수리검이 이동하도록 적용.
   // 수리검 배열의 길이만큼 반복하는 반복문
@@ -159,10 +169,14 @@ const windowEvent = () => {
     // 44-4-1. enter 키 추가
     // (문제) renderGame에 적용할 경우 키눌림의 딜레이 차이 없이 키눌림 체크가 빠르게 되면서 talk 메서드가 여러번 호출되는 문제로
     if (key.keyDown["enter"]) {
-      npcOne.talk();
+      //     npcOne.talk(); 51-3-1. 배열로 적용
 
       // (48-6) 두번째 npc talk() 메서드 호출
-      npcTwo.talk();
+      //     npcTwo.talk();
+      // 51-3-1. 배열로 적용
+      allNpcComProp.arr.forEach((arr, i) => {
+        arr.talk(arr);
+      });
     }
 
     // 8-2. key를 누를 때 히어로 인스턴스에 keyMotion 메소드를 호출해서 히어로의 움직임을 변경.
@@ -227,10 +241,14 @@ const init = () => {
           npcOne = new Npc(); 
   */
   // (47-1-1) npc 인스턴스를 생성할 때 levelQuest 넘기기
-  npcOne = new Npc(levelQuest);
+  //     npcOne = new Npc(levelQuest);
+  // 51-2. 배열에 npc 담기
+  allNpcComProp.arr[0] = new Npc(levelQuest);
 
   // (48-3) 두번째 npc 인스터스 생성
-  npcTwo = new Npc(levelQuestTwo);
+  //     npcTwo = new Npc(levelQuestTwo);
+  // 51-2-1. 배열에 npc 담기
+  allNpcComProp.arr[1] = new Npc(levelQuestTwo);
 
   // 20-1.
   //    monster = new Monster();

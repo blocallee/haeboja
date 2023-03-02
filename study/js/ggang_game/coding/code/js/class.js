@@ -75,14 +75,14 @@ class Npc {
   }
 
   //(44-3) talk 메서드 추가 : 모달 show/hide
-  talk() {
+  talk(el) {
     //(44-3-1) 조건문 : 대화창 열려있지 않고, 충돌했을 때
     if (!this.talkOn && this.npcCrash) {
       this.talkOn = true;
       // (45-3) 모달이 열릴 때 quest() 호출
       //     this.quest();
       // (47-2-7) 기존 quest() 호출하던 부분 수정
-      this.property.quest();
+      this.property.quest(el);
       this.modal.classList.add("active");
     } else if (this.talkOn) {
       this.talkOn = false;
@@ -1091,7 +1091,7 @@ class Monster {
     // 38-5. 죽은 몬스터의 점수를 더한다.
     stageInfo.totalScore += this.score;
     // 38-6. score box에 현재 얻은 점수 반영
-    document.querySelector(".score_box").innerText = stageInfo.tatalScore;
+    document.querySelector(".score_box").innerText = stageInfo.totalScore;
   }
 
   // (40-1-2) 몬스터의 경험치를 관리할 setExp 메서드 추가

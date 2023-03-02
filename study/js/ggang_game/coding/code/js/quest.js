@@ -15,7 +15,7 @@ const levelQuest = {
   // ( 45 ) 퀘스트 내용을 만들어 모달에 추가.
   //      quest() {
   // (47-2-5) 오브젝트 내에 위치하기 위해서 key, value 형식으로 수정
-  quest: () => {
+  quest: (el) => {
     // (46-1) 메세지 오브젝트 만들기 : 선언
     const message = {
       // (46-1-1) 퀘스트 시작
@@ -35,18 +35,18 @@ const levelQuest = {
     // (46-2-2) 퀘스트 진행 상황에 맞는 메세지가 출력되도록 조건문 작성
     //     if (!this.questStart) {
     // (47-2-6) 모든 this : 클래스에서 빠져나왔기 때문에 this 사용 불가. 인스턴스 네임(npcOne)으로 변경
-    if (!npcOne.questStart) {
+    if (!el.questStart) {
       messageState = message.start;
-      npcOne.questStart = true;
-    } else if (npcOne.questStart && !npcOne.questEnd && hero.level < 5) {
+      el.questStart = true;
+    } else if (el.questStart && !el.questEnd && hero.level < 5) {
       messageState = message.ing;
-    } else if (npcOne.questStart && !npcOne.questEnd && hero.level >= 5) {
+    } else if (el.questStart && !el.questEnd && hero.level >= 5) {
       messageState = message.suc;
-      npcOne.questEnd = true;
+      el.questEnd = true;
 
       // (46-3-4)퀘스트 완료 시 보상으로 heroUpgrade 호출
       hero.heroUpgrade(50000);
-    } else if (npcOne.questStart && npcOne.questEnd) {
+    } else if (el.questStart && el.questEnd) {
       messageState = message.end;
     }
 
@@ -77,7 +77,7 @@ const levelQuestTwo = {
   positionX: 8500,
   idleMessage:
     "<p>곧 좀비왕이 부활하려고 해.. <br /><span>대화 Enter</span></p>",
-  quest: () => {
+  quest: (el) => {
     // (48-1) level 변수 추가해서 적용.
     const level = 7;
     const message = {
@@ -89,18 +89,18 @@ const levelQuestTwo = {
 
     let messageState = "";
 
-    if (!npcTwo.questStart) {
+    if (!el.questStart) {
       messageState = message.start;
       // (48-4) npcOne 인스턴스 네임을 NpcTwo로 변경
-      npcTwo.questStart = true;
-    } else if (npcTwo.questStart && !npcTwo.questEnd && hero.level < level) {
+      el.questStart = true;
+    } else if (el.questStart && !el.questEnd && hero.level < level) {
       messageState = message.ing;
-    } else if (npcTwo.questStart && !npcTwo.questEnd && hero.level >= level) {
+    } else if (el.questStart && !el.questEnd && hero.level >= level) {
       messageState = message.suc;
-      npcTwo.questEnd = true;
+      el.questEnd = true;
 
       hero.heroUpgrade(70000);
-    } else if (npcTwo.questStart && npcTwo.questEnd) {
+    } else if (el.questStart && el.questEnd) {
       messageState = message.end;
     }
 

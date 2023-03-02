@@ -42,7 +42,7 @@ const greenMonBoss = {
 };
 // 34-1-1. 노랑보스몬 object 만들기
 const yellowMonBoss = {
-  name: "green_mon_boss",
+  name: "yellow_mon_boss",
   hpValue: 400000,
   speed: 4,
   crashDamage: 2000,
@@ -51,7 +51,7 @@ const yellowMonBoss = {
 };
 // 34-1-2. 핑크보스몬 object 만들기
 const pinkMonBoss = {
-  name: "green_mon_boss",
+  name: "pink_mon_boss",
   hpValue: 800000,
   speed: 3,
   crashDamage: 30000,
