@@ -2,9 +2,11 @@
 class Npc {
   //constructor() {
   // (47-1-2) 넘어온 퀘스트 오브젝트 프로퍼티(levelQuest)를 받는다
-  constructor(property) {
+  constructor(property, positionX) {
     // (47-1-3) property 변수 생성 : 넘어온 프로퍼티값 담기
     this.property = property;
+    // 51. 추가
+    this.positionX = positionX;
     // (43-1) 클래스에 인스턴스를 생성할 때 npc를 화면에 추가
     this.parentNode = document.querySelector(".game");
     this.el = document.createElement("div");
@@ -40,7 +42,7 @@ class Npc {
     this.el.innerHTML = npcTalk;
 
     // (47-3-2) npc를 초기화할 때 위치 잡아주기
-    this.el.style.left = this.property.positionX + "px";
+    this.el.style.left = this.positionX + "px";
 
     // (43-4) parent Node 인 .game에 npc_box 엘리먼트를 추가
     this.parentNode.appendChild(this.el);

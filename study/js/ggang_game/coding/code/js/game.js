@@ -65,6 +65,11 @@ const stageInfo = {
   //       callPosition: [1000, 5000, 9000],
   //(49-3) (game.js) callPosition에 소환위치 맵핑
   callPosition: [1000, 5000, 9000, 12000],
+  // 51
+  npcQuest: [
+    { defaultQuest: levelQuest, npcPos: 4500 },
+    { defaultQuest: levelQuestTwo, npcPos: 8500 },
+  ],
 };
 
 // 11. 자주 사용하는 값 공통터리
@@ -243,12 +248,20 @@ const init = () => {
   // (47-1-1) npc 인스턴스를 생성할 때 levelQuest 넘기기
   //     npcOne = new Npc(levelQuest);
   // 51-2. 배열에 npc 담기
-  allNpcComProp.arr[0] = new Npc(levelQuest);
+  //allNpcComProp.arr[0] = new Npc(levelQuest);
+
+  //51.
+  for (let i = 0; i < stageInfo.npcQuest.length; i++) {
+    allNpcComProp.arr[i] = new Npc(
+      stageInfo.npcQuest[i].defaultQuest,
+      stageInfo.npcQuest[i].npcPos
+    );
+  }
 
   // (48-3) 두번째 npc 인스터스 생성
   //     npcTwo = new Npc(levelQuestTwo);
   // 51-2-1. 배열에 npc 담기
-  allNpcComProp.arr[1] = new Npc(levelQuestTwo);
+  //allNpcComProp.arr[1] = new Npc(levelQuestTwo);
 
   // 20-1.
   //    monster = new Monster();

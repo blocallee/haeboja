@@ -4,7 +4,7 @@
 const levelQuest = {
   //(47-3) npc 위치 조절
   // (47-3-1) postionX 추가
-  positionX: 4500,
+  //positionX: 0,
 
   // (47-2) property로 분리할 요소 찾기
   // (47-2-1) class Npc 내 npcTalk 말풍선 멘트 텍스트 부분 복사해서 오브젝트로 이동
@@ -74,7 +74,7 @@ const levelQuest = {
 
 // (48) 두번째 퀘스트 추가
 const levelQuestTwo = {
-  positionX: 8500,
+  // positionX: 0,
   idleMessage:
     "<p>곧 좀비왕이 부활하려고 해.. <br /><span>대화 Enter</span></p>",
   quest: (el) => {
